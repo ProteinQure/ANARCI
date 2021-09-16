@@ -23,7 +23,6 @@ def download_files():
         shutil.rmtree("muscle_alignments/")
         shutil.rmtree("HMMs/")
         shutil.rmtree("IMGT_sequence_files/")
-        (ANARCI_LOC / "dat").mkdir()
     except OSError:
         pass
 
@@ -31,6 +30,7 @@ def download_files():
     subprocess.run(["bash", "RUN_pipeline.sh"])
 
     shutil.copy("curated_alignments/germlines.py", ANARCI_LOC)
+    (ANARCI_LOC / "dat").mkdir(exist_ok=True)
     shutil.copytree("HMMs", Path(ANARCI_LOC, "dat/HMMs/"))
 
 
@@ -52,5 +52,5 @@ setup(
     scripts=["bin/ANARCI"],
     install_requires=["biopython>=1.78"],
     data_files=[("bin", ["bin/muscle", "bin/muscle_macOS"])],
-    cmdclass={"install": Install},
+    cmdclass={"download_and_install": Install},
 )
